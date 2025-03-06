@@ -5,8 +5,8 @@ from typing import Optional
 
 import jinja2
 
-from book_cartographer.character_graph import CharacterGraph
-from book_cartographer.output_generators.base import (
+from src.book_cartographer.character_graph import CharacterGraph
+from src.book_cartographer.output_generators.base import (
     BaseOutputGenerator,
     OutputGeneratorConfig,
 )

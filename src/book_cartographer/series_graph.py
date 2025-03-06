@@ -9,7 +9,7 @@ from datetime import datetime
 import networkx as nx
 from pydantic import BaseModel, Field
 
-from book_cartographer.character_graph import (
+from src.book_cartographer.character_graph import (
     CharacterGraph, 
     CharacterNode, 
     RelationshipEdge,

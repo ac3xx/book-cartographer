@@ -8,9 +8,9 @@ import spacy
 from spacy.tokens import Doc, Span
 from tqdm import tqdm
 
-from book_cartographer.config import ProcessingConfig
-from book_cartographer.nlp.llm_processor import LLMProcessor
-from book_cartographer.nlp.prompts import LLM_ENTITY_EXTRACTION_PROMPT
+from src.book_cartographer.config import ProcessingConfig
+from src.book_cartographer.nlp.llm_processor import LLMProcessor
+from src.book_cartographer.nlp.prompts import LLM_ENTITY_EXTRACTION_PROMPT
 
 logger = logging.getLogger(__name__)
 
@@ -244,7 +244,7 @@ class EntityExtractor:
         Returns:
             Dictionary of entity types to sets of entity names
         """
-        from book_cartographer.nlp.prompts import generate_llm_entity_extraction_prompt
+        from src.book_cartographer.nlp.prompts import generate_llm_entity_extraction_prompt
         import json
         import time
         

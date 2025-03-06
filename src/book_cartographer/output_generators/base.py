@@ -7,7 +7,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from book_cartographer.character_graph import CharacterGraph
+from src.book_cartographer.character_graph import CharacterGraph
 
 logger = logging.getLogger(__name__)
 

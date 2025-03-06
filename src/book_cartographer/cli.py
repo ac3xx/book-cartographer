@@ -11,18 +11,18 @@ import click
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from book_cartographer.character_graph import CharacterGraph
-from book_cartographer.config import (
+from src.book_cartographer.character_graph import CharacterGraph
+from src.book_cartographer.config import (
     AppConfig,
     get_config,
 )
-from book_cartographer.epub_parser import EPUBParser
-from book_cartographer.nlp.entity_extractor import EntityExtractor
-from book_cartographer.nlp.llm_processor import LLMProcessor
-from book_cartographer.output_generators.base import OutputGeneratorConfig
-from book_cartographer.output_generators.image_prompt import ImagePromptGenerator
-from book_cartographer.output_generators.kodict import KODictGenerator
-from book_cartographer.utils import (
+from src.book_cartographer.epub_parser import EPUBParser
+from src.book_cartographer.nlp.entity_extractor import EntityExtractor
+from src.book_cartographer.nlp.llm_processor import LLMProcessor
+from src.book_cartographer.output_generators.base import OutputGeneratorConfig
+from src.book_cartographer.output_generators.image_prompt import ImagePromptGenerator
+from src.book_cartographer.output_generators.kodict import KODictGenerator
+from src.book_cartographer.utils import (
     extract_character_excerpts,
     sanitize_filename,
     setup_logging,
@@ -592,7 +592,7 @@ def series_init_command(series_name: str, author: Optional[str], output: Optiona
     
     SERIES_NAME is the name of the book series to initialize.
     """
-    from book_cartographer.series_graph import SeriesGraph
+    from src.book_cartographer.series_graph import SeriesGraph
     
     # Default output file if not provided
     if not output:
@@ -635,7 +635,7 @@ def series_analyze_command(series_file: Path, output: Optional[Path]) -> None:
     
     SERIES_FILE is the path to the series tracking file.
     """
-    from book_cartographer.series_graph import SeriesGraph
+    from src.book_cartographer.series_graph import SeriesGraph
     
     # Load the series graph
     try:

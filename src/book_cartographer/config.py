@@ -232,19 +232,22 @@ class AppConfig(BaseModel):
         # Convert to dictionary
         config_dict = self.to_dict()
         
-        # Convert Path objects to strings
-        def convert_paths(data: Dict[str, Any]) -> Dict[str, Any]:
+        # Convert Path objects to strings and handle None values
+        def convert_values(data: Dict[str, Any]) -> Dict[str, Any]:
             result = {}
             for key, value in data.items():
                 if isinstance(value, dict):
-                    result[key] = convert_paths(value)
+                    result[key] = convert_values(value)
                 elif isinstance(value, Path):
                     result[key] = str(value)
+                elif value is None:
+                    # Skip None values for TOML serialization
+                    continue
                 else:
                     result[key] = value
             return result
         
-        config_dict = convert_paths(config_dict)
+        config_dict = convert_values(config_dict)
         
         # Determine file type by extension and save
         if file_path.suffix.lower() in ['.toml', '.tml']:

@@ -12,8 +12,8 @@ from litellm import acompletion
 from pydantic import BaseModel
 from tqdm.asyncio import tqdm_asyncio
 
-from book_cartographer.config import LLMConfig, ProcessingConfig
-from book_cartographer.nlp.prompts import (
+from src.book_cartographer.config import LLMConfig, ProcessingConfig
+from src.book_cartographer.nlp.prompts import (
     generate_character_description_prompt,
     generate_character_verification_prompt,
     generate_relationship_extraction_prompt,
