@@ -2,7 +2,23 @@
 
 ## High Priority
 
-✅ **Fixed:** ~~**1. Missing Character Interaction Counts**~~
+### 1. Character Override Functionality
+
+**Problem**: No way to override character information at different processing stages.
+
+**Details**:
+- Need ability to override character information in both books and series
+- Should work at all processing stages (extraction, classification, etc.)
+- Allow overriding character existence (force inclusion in character DB)
+- Support overriding character type classifications (major/supporting/minor)
+- Important for correcting automated classification errors
+
+**Potential Solution**:
+- Implement override mechanism in configuration or via CLI options
+- Allow JSON/TOML configuration of character overrides
+- Support per-book and series-wide override settings
+
+✅ **Fixed:** ~~**2. Missing Character Interaction Counts**~~
 
 ~~**Problem**: The relationship extraction process doesn't populate interaction counts, which are critical for accurate centrality calculations.~~
 
@@ -16,7 +32,24 @@
 
 ## Medium Priority
 
-✅ **Fixed:** ~~**2. Pydantic Deprecation Warnings**~~
+### 2. LLM Call Performance Improvements
+
+**Problem**: LLM processing is sequential and slow for large books with many characters.
+
+**Details**:
+- Current implementation makes LLM calls sequentially
+- Character verification and relationship extraction are bottlenecks
+- No batching or parallel processing for multiple characters
+- Increases processing time significantly for books with many characters
+
+**Potential Solutions**:
+- Implement async/await pattern for concurrent LLM calls
+- Add batching for character verification (process multiple characters per call)
+- Implement parallel processing for relationship extraction
+- Add caching mechanism to avoid redundant LLM calls
+- Consider adding progress tracking for long-running LLM operations
+
+✅ **Fixed:** ~~**3. Pydantic Deprecation Warnings**~~
 
 ~~**Problem**: Multiple uses of deprecated `.dict()` method in Pydantic models.~~
 
@@ -25,7 +58,7 @@
 - Added fallback support for both Pydantic v1 and v2 in llm_processor.py
 - Maintains backward compatibility while fixing deprecation warnings
 
-### 3. Test Failure in Entity Extractor
+### 4. Test Failure in Entity Extractor
 
 **Problem**: The `test_extract_all_entities` test is failing.
 
@@ -34,7 +67,7 @@
 - Likely needs to use `await` for an async function call
 - Test doesn't handle the asynchronous nature of the entity extractor
 
-### 4. Limited Graph Connectivity
+### 5. Limited Graph Connectivity
 
 **Problem**: Character graphs often have too few relationships to enable meaningful network analysis.
 
@@ -51,7 +84,7 @@
 
 ## Low Priority
 
-### 5. Hard-coded Thresholds
+### 6. Hard-coded Thresholds
 
 **Problem**: Character type classification thresholds are hard-coded.
 
@@ -61,7 +94,7 @@
 - Supporting character threshold: importance > 4.0
 - These should adapt to the book size and character count
 
-### 6. Limited Test Coverage
+### 7. Limited Test Coverage
 
 **Problem**: Tests don't verify behavior with actual book data.
 
@@ -70,7 +103,7 @@
 - No end-to-end tests with real EPUB files
 - Test data doesn't include edge cases (disconnected graphs, etc.)
 
-### 7. Incomplete Real-world Testing
+### 8. Incomplete Real-world Testing
 
 **Problem**: Haven't tested centrality calculation with the actual EPUB processing pipeline.
 
@@ -78,7 +111,7 @@
 - Only tested with manually-created relationship data
 - Need to test the entire extraction and analysis pipeline
 
-### 8. Runtime Performance
+### 9. Runtime Performance
 
 **Problem**: Centrality algorithms may be slow for very large character graphs.
 
