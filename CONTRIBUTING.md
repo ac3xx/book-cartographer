@@ -1,6 +1,6 @@
-# Contributing to EPUB Character Graph
+# Contributing to BookCartographer
 
-Thank you for considering contributing to EPUB Character Graph! This document provides guidelines and instructions for contributing to the project.
+Thank you for considering contributing to BookCartographer! This document provides guidelines and instructions for contributing to the project.
 
 ## Code of Conduct
 
@@ -12,7 +12,7 @@ Please be respectful and considerate of others when contributing to this project
 
 If you find a bug in the project:
 
-1. Check if the bug has already been reported in the [GitHub Issues](https://github.com/ac3xx/epub-dict-gen/issues).
+1. Check if the bug has already been reported in the [GitHub Issues](https://github.com/ac3xx/book-cartographer/issues).
 2. If not, create a new issue with a clear description of the bug, including:
    - A clear and descriptive title
    - Steps to reproduce the issue
@@ -24,7 +24,7 @@ If you find a bug in the project:
 
 If you have an idea for an enhancement:
 
-1. Check if a similar enhancement has already been suggested in the [GitHub Issues](https://github.com/ac3xx/epub-dict-gen/issues).
+1. Check if a similar enhancement has already been suggested in the [GitHub Issues](https://github.com/ac3xx/book-cartographer/issues).
 2. If not, create a new issue with a clear description of your enhancement idea, including:
    - A clear and descriptive title
    - A detailed description of the proposed enhancement
@@ -51,8 +51,8 @@ We welcome pull requests! Here's how to submit one:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/ac3xx/epub-dict-gen.git
-cd epub-dict-gen
+git clone https://github.com/ac3xx/book-cartographer.git
+cd book-cartographer
 ```
 
 2. Install dependencies:
@@ -85,7 +85,7 @@ poetry run mypy .
 
 ## Project Structure
 
-- `epub_character_graph/` - Main package
+- `src/book_cartographer/` - Main package
 - `tests/` - Unit tests
 - `docs/` - Documentation
 - `scripts/` - Utility scripts

@@ -120,7 +120,7 @@ class KODictGenerator(BaseOutputGenerator):
 #description:Character dictionary for '{self.graph.title}' by {self.graph.author}
 #year:{Path.cwd().stat().st_mtime_ns // 1_000_000_000}
 #source:Generated from EPUB
-#publisher:epub-character-graph
+#publisher:book-cartographer
 
 """
 
@@ -187,7 +187,7 @@ class KODictGenerator(BaseOutputGenerator):
                 "author": self.graph.author,
                 "description": f"Character dictionary for '{self.graph.title}' by {self.graph.author}",
                 "source": "Generated from EPUB",
-                "generator": "epub-character-graph",
+                "generator": "book-cartographer",
             },
             "entries": {}
         }

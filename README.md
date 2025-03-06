@@ -28,8 +28,8 @@ A comprehensive command-line tool that maps and analyzes the entire world of EPU
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/epub-dict-gen.git
-cd epub-dict-gen
+git clone https://github.com/ac3xx/book-cartographer.git
+cd book-cartographer
 ```
 
 2. Install dependencies with Poetry:
@@ -214,7 +214,7 @@ spacy_model = "en_core_web_lg"  # spaCy model to use
 batch_size = 10  # Batch size for processing
 max_chunk_size = 1000  # Maximum chunk size for text processing
 min_entity_occurrences = 3  # Minimum occurrences for entity to be considered
-cache_dir = "~/.cache/epub-character-graph"  # Cache directory for LLM responses
+cache_dir = "~/.cache/book-cartographer"  # Cache directory for LLM responses
 use_cache = true  # Whether to use caching
 parallel_requests = 5  # Number of parallel LLM requests
 extract_relationships = true  # Whether to extract character relationships
@@ -255,7 +255,7 @@ The application uses the following order of precedence for configuration:
 2. Configuration file specified with `--config`
 3. Default configuration files in standard locations:
    - `./config.toml` or `./config.json` (current directory)
-   - `~/.config/epub-character-graph/config.toml` or `~/.config/epub-character-graph/config.json`
+   - `~/.config/book-cartographer/config.toml` or `~/.config/book-cartographer/config.json`
 4. Default values built into the application (lowest priority)
 
 ## How It Works

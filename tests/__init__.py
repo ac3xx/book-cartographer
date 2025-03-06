@@ -1,1 +1,1 @@
-"""Test package for epub-character-graph."""
+"""Test package for BookCartographer."""

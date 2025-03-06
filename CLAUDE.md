@@ -1,4 +1,4 @@
-# CLAUDE.md - Epub Dict Gen
+# CLAUDE.md - BookCartographer
 
 ## Build & Development Commands
 - Install dependencies: `poetry install`
@@ -7,7 +7,7 @@
 - Format code: `poetry run black .`
 - Type check: `poetry run mypy .`
 - Lint: `poetry run ruff check .`
-- Process EPUB: `poetry run python -m epub_character_graph process path/to/file.epub`
+- Process EPUB: `poetry run python -m src.book_cartographer process path/to/file.epub`
 - Additional processing flags: `--all-relationships` `--use-llm-for-nlp`
 
 ## Code Style Guidelines

@@ -1,4 +1,4 @@
-"""Command-line interface for the EPUB character graph generator."""
+"""Command-line interface for BookCartographer."""
 
 import asyncio
 import json
