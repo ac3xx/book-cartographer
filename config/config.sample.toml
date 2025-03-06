@@ -1,4 +1,4 @@
-# EPUB Character Graph Generator - Sample Configuration File
+# BookCartographer - Sample Configuration File
 # Copy this file to config.toml and customize as needed
 
 # Logging and general configuration
@@ -8,13 +8,13 @@ interim_data_dir = "./interim_data"  # Directory for interim data
 
 # LLM Configuration
 [llm]
-provider = "openai"  # LLM provider (openai, anthropic, etc.)
-model = "gpt-4"  # Model to use
-# api_key = ""  # API key (if not set, will look for environment variable OPENAI_API_KEY)
+provider = "gemini"  # LLM provider (gemini, anthropic, openai, etc.)
+model = "gemini-2.0-flash"  # Model to use
+# api_key = ""  # API key (if not set, will look for environment variable based on provider)
 max_tokens = 4096  # Maximum tokens for completions
 temperature = 0.7  # Temperature for completions (0.0-1.0)
-fallback_providers = ["anthropic", "google"]  # Providers to try if primary fails
-fallback_models = { "anthropic" = "claude-2", "google" = "gemini-pro" }  # Models for fallback providers
+fallback_providers = ["anthropic", "openai"]  # Providers to try if primary fails
+fallback_models = { "anthropic" = "claude-3-5-haiku-latest", "openai" = "o3-mini" }  # Models for fallback providers
 retry_attempts = 3  # Number of retry attempts
 timeout = 60  # Timeout in seconds for LLM requests
 
