@@ -1,19 +1,21 @@
-# EPUB Entity Extraction and Character Graph Generator
+# BookCartographer
 
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat)](https://pycqa.github.io/isort/)
 
-A command-line application that processes EPUB files to extract named entities, build a character graph, and generate specialized outputs for various use cases.
+A comprehensive command-line tool that maps and analyzes the entire world of EPUB books - extracting characters, locations, organizations, and other entities to build relationship graphs and generate specialized outputs for readers, writers, and researchers.
 
 ## Features
 
-- Extract named entities from EPUB content (characters, locations, organizations)
-- Build character graphs representing relationships between characters
-- Generate AI image prompts based on character descriptions
-- Create KOReader-compatible dictionaries for in-reader character lookup
-- Hybrid NLP approach using spaCy and LLMs
+- Extract named entities from EPUB content (characters, locations, organizations, objects, and more)
+- Build comprehensive entity graphs representing relationships between all story elements
+- Generate AI image prompts based on entity descriptions
+- Create KOReader-compatible dictionaries for in-reader entity lookup
+- Track entity evolution across book series
+- Map the complete narrative landscape with centrality and importance metrics
+- Hybrid NLP approach combining spaCy and LLMs for nuanced understanding
 
 ## Installation
 
@@ -49,26 +51,26 @@ poetry run python -m spacy download en_core_web_lg
 ### Basic Usage
 
 ```bash
-# Process an EPUB file
-poetry run python -m epub_character_graph process your_book.epub --mode=image-prompts
+# Process an EPUB file 
+poetry run book-cartographer process your_book.epub --mode=image-prompts
 
 # Create a configuration file
-poetry run python -m epub_character_graph init-config
+poetry run book-cartographer init-config
 ```
 
 Processing an EPUB file will:
-1. Extract character information from the EPUB
-2. Create a character graph
-3. Generate AI image prompts for the characters
-4. Save the output to `your_book_characters.txt`
+1. Extract entity information from the EPUB (characters, locations, etc.)
+2. Create a comprehensive entity relationship graph
+3. Generate the requested output format (image prompts, dictionary, etc.)
+4. Save the output and graph data for further analysis
 
 ### Command-line Reference
 
 ```
-Usage: python -m epub_character_graph [OPTIONS] COMMAND [ARGS]...
+Usage: book-cartographer [OPTIONS] COMMAND [ARGS]...
 
 Commands:
-  process      Process EPUB files to extract character data and generate outputs
+  process      Process EPUB files to extract entity data and generate outputs
   init-config  Initialize a new configuration file with default settings
 
 Options:
@@ -78,9 +80,9 @@ Options:
 #### Process Command
 
 ```
-Usage: python -m epub_character_graph process [OPTIONS] EPUB_FILE
+Usage: book-cartographer process [OPTIONS] EPUB_FILE
 
-  Process EPUB files to extract character data and generate outputs.
+  Process EPUB files to extract entity data and generate outputs.
 
   EPUB_FILE is the path to the EPUB file to process.
 
@@ -99,7 +101,7 @@ Options:
 #### Init-Config Command
 
 ```
-Usage: python -m epub_character_graph init-config [OPTIONS]
+Usage: book-cartographer init-config [OPTIONS]
 
   Initialize a new configuration file with default settings.
 
@@ -119,7 +121,7 @@ Options:
 Generates character descriptions formatted for AI image generation:
 
 ```bash
-poetry run python -m epub_character_graph process your_book.epub --mode=image-prompts
+poetry run book-cartographer process your_book.epub --mode=image-prompts
 ```
 
 Output example:
@@ -142,7 +144,7 @@ A tall, elegant woman in her mid-thirties with fiery red hair and piercing green
 Generates a character encyclopedia compatible with KOReader:
 
 ```bash
-poetry run python -m epub_character_graph process your_book.epub --mode=kodict
+poetry run book-cartographer process your_book.epub --mode=kodict
 ```
 
 The output file can be imported into KOReader as a dictionary, allowing readers to look up character information while reading.
@@ -156,7 +158,7 @@ You can customize the behavior by creating a configuration file and passing it w
 The application supports configuration files in TOML or JSON format. To create a default configuration file:
 
 ```bash
-poetry run python -m epub_character_graph init-config --output config.toml
+poetry run book-cartographer init-config --output config.toml
 ```
 
 This will create a configuration file with default settings. You can then edit this file to customize the behavior.
@@ -256,10 +258,12 @@ The application uses the following order of precedence for configuration:
 ## How It Works
 
 1. **EPUB Parsing**: Extracts text content from EPUB files
-2. **Entity Extraction**: Uses spaCy to identify potential character names and other entities
-3. **LLM Processing**: Uses LLMs to verify characters and extract detailed information
-4. **Graph Building**: Creates a network graph of characters and their relationships
-5. **Output Generation**: Produces formatted output based on the selected mode
+2. **Entity Extraction**: Uses spaCy to identify all types of entities (characters, locations, items, etc.)
+3. **LLM Processing**: Uses LLMs to verify entities and extract detailed information and relationships
+4. **Graph Building**: Creates a comprehensive network graph of all narrative elements
+5. **Analysis**: Performs centrality and importance analysis for all entities
+6. **Series Tracking**: Identifies and tracks entities across book series when applicable
+7. **Output Generation**: Produces formatted output based on the selected mode
 
 ## Technical Details
 

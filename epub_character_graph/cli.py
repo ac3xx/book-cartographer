@@ -332,7 +332,11 @@ async def process_epub(
 
 @click.group()
 def main():
-    """Process EPUB files to extract character data and generate outputs."""
+    """BookCartographer: Map and analyze the worlds within EPUB files.
+    
+    Extract entities, relationships, and narrative elements from EPUB books.
+    Generate specialized outputs for readers, writers, and researchers.
+    """
     pass
 
 
@@ -474,9 +478,13 @@ def process_command(
     book_number: Optional[int],
     add_to_series: bool,
 ) -> None:
-    """Process EPUB files to extract character data and generate outputs.
+    """Process EPUB files to extract entity data and generate outputs.
     
     EPUB_FILE is the path to the EPUB file to process.
+    
+    This command extracts characters, locations, organizations, and other entities
+    from an EPUB file, builds relationship graphs, and generates outputs in the
+    specified format.
     """
     # Setup logging
     setup_logging("DEBUG" if verbose else "INFO")
@@ -709,7 +717,7 @@ def init_config_command(output: Path, overwrite: bool) -> None:
     """Initialize a new configuration file with default settings.
     
     This command creates a new configuration file with all default settings.
-    It can be used as a starting point for customizing the configuration.
+    It can be used as a starting point for customizing BookCartographer's behavior.
     """
     if output.exists() and not overwrite:
         console.print(f"[yellow]Config file {output} already exists. Use --overwrite to replace it.[/yellow]")

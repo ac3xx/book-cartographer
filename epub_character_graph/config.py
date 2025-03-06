@@ -74,7 +74,7 @@ class ProcessingConfig(BaseModel):
         default=3, description="Minimum occurrences for entity to be considered relevant"
     )
     cache_dir: Path = Field(
-        default=Path.home() / ".cache" / "epub-character-graph",
+        default=Path.home() / ".cache" / "book-cartographer",
         description="Directory for caching LLM responses",
     )
     use_cache: bool = Field(default=True, description="Whether to use caching")
@@ -278,8 +278,8 @@ def get_config(config_file: Optional[Path] = None) -> AppConfig:
     default_locations = [
         Path("./config.toml"),
         Path("./config.json"),
-        Path.home() / ".config" / "epub-character-graph" / "config.toml",
-        Path.home() / ".config" / "epub-character-graph" / "config.json",
+        Path.home() / ".config" / "book-cartographer" / "config.toml",
+        Path.home() / ".config" / "book-cartographer" / "config.json",
     ]
     
     for loc in default_locations:

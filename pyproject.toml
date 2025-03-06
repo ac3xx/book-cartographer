@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "epub-dict-gen"
+name = "book-cartographer"
 version = "0.1.0"
-description = "Tool to extract character graphs from EPUB files"
+description = "Tool to extract and map entities and relationships from EPUB files"
 authors = ["James Long <me@james-long.com>"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/ac3xx/epub-dict-gen"
-documentation = "https://github.com/ac3xx/epub-dict-gen/docs"
+repository = "https://github.com/ac3xx/book-cartographer"
+documentation = "https://github.com/ac3xx/book-cartographer/docs"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -47,12 +47,12 @@ pytest = "^7.4.3"
 ruff = "^0.1.6"
 
 [tool.poetry.scripts]
-epub-character-graph = "epub_character_graph.cli:main"
+book-cartographer = "epub_character_graph.cli:main"
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/ac3xx/epub-dict-gen/issues"
-"Documentation" = "https://github.com/ac3xx/epub-dict-gen/docs"
-"Source Code" = "https://github.com/ac3xx/epub-dict-gen"
+"Bug Tracker" = "https://github.com/ac3xx/book-cartographer/issues"
+"Documentation" = "https://github.com/ac3xx/book-cartographer/docs"
+"Source Code" = "https://github.com/ac3xx/book-cartographer"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
