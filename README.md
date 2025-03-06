@@ -19,7 +19,7 @@ A command-line application that processes EPUB files to extract named entities, 
 
 ### Prerequisites
 
-- Python 3.12 or higher
+- Python 3.9 or higher
 - Poetry dependency manager
 
 ### Setup
@@ -119,7 +119,7 @@ Options:
 Generates character descriptions formatted for AI image generation:
 
 ```bash
-poetry run python -m epub_character_graph your_book.epub --mode=image-prompts
+poetry run python -m epub_character_graph process your_book.epub --mode=image-prompts
 ```
 
 Output example:
@@ -142,7 +142,7 @@ A tall, elegant woman in her mid-thirties with fiery red hair and piercing green
 Generates a character encyclopedia compatible with KOReader:
 
 ```bash
-poetry run python -m epub_character_graph your_book.epub --mode=kodict
+poetry run python -m epub_character_graph process your_book.epub --mode=kodict
 ```
 
 The output file can be imported into KOReader as a dictionary, allowing readers to look up character information while reading.
@@ -188,6 +188,19 @@ retry_attempts = 3  # Number of retry attempts
 timeout = 60  # Timeout in seconds for LLM requests
 ```
 
+#### Series Settings
+
+```toml
+[series]
+enable_series_tracking = false  # Enable series tracking features
+series_name = ""  # Series name (overrides auto-detection)
+character_similarity_threshold = 0.75  # Threshold for matching characters across books (0.0-1.0)
+track_character_evolution = true  # Track character evolution across books in the series
+cross_book_references = true  # Include cross-references between books
+series_metadata_file = ""  # Path to series metadata file
+auto_detect_series = true  # Attempt to auto-detect series information from book metadata
+```
+
 #### Processing Settings
 
 ```toml
@@ -201,6 +214,20 @@ use_cache = true  # Whether to use caching
 parallel_requests = 5  # Number of parallel LLM requests
 extract_relationships = true  # Whether to extract character relationships
 extract_groups = true  # Whether to extract character groups/factions
+use_llm_for_nlp = false  # Whether to use LLM for initial NLP entity extraction
+all_character_relationships = false  # Extract relationships between all characters, not just major ones
+track_metrics = true  # Track additional metrics like mention counts and centrality scores
+store_raw_metrics = true  # Store raw metrics in output JSON
+track_character_evolution = true  # Track character evolution throughout the narrative
+comprehensive_analysis = true  # Perform comprehensive character analysis
+store_intermediate_outputs = false  # Store intermediate processing outputs
+
+# Excerpt limits for different character types
+[processing.excerpt_limits]
+major_character = 20  # Excerpt limit for major characters
+supporting_character = 10  # Excerpt limit for supporting characters
+minor_character = 5  # Excerpt limit for minor characters
+relationship = 15  # Excerpt limit for character relationships
 ```
 
 #### Output Settings
