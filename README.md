@@ -43,8 +43,9 @@ poetry run python -m spacy download en_core_web_lg
 ```
 
 4. Set up API keys (required for LLM processing):
-   * For OpenAI: `export OPENAI_API_KEY=your_api_key_here`
+   * For Gemini (default): `export GOOGLE_API_KEY=your_api_key_here`
    * For Anthropic: `export ANTHROPIC_API_KEY=your_api_key_here`
+   * For OpenAI: `export OPENAI_API_KEY=your_api_key_here`
 
 ## Usage
 
