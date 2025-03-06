@@ -56,6 +56,9 @@ poetry run book-cartographer process your_book.epub --mode=image-prompts
 
 # Create a configuration file
 poetry run book-cartographer init-config
+
+# Alternatively, you can run using the module
+poetry run python -m src.book_cartographer process your_book.epub
 ```
 
 Processing an EPUB file will:
