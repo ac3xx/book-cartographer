@@ -1,0 +1,85 @@
+flowchart TD
+    %% Entry Points
+    A1[Single EPUB File] -->|Process| B1[Basic Processing]
+    A2[Series of EPUBs] -->|Series init| B2[Series Processing]
+    
+    %% Basic Processing Flow
+    B1 -->|Parse| C1[EPUB Parser]
+    C1 -->|Extract| D1[Full Text]
+    C1 -->|Extract| E1[Metadata: title, author]
+    
+    %% Series Processing Flow
+    B2 -->|Create| F1[Series Metadata:
+    series_name
+    author
+    created_at]
+    
+    %% Book Processing
+    G0[Book Processing] -->|Choice| G1{Series Mode?}
+    G1 -->|Single Book| G2[Standard Character Graph]
+    G1 -->|"Series Book
+    (--series-name, --book-number)"| G3[Series-Aware Character Graph]
+    
+    %% Character Extraction (Common)
+    G2 -->|Extract| H1[Characters]
+    G3 -->|Extract| H1
+    
+    %% Series-Specific Character Processing
+    G3 -->|Add| H2[Series-Specific Fields:
+    canonical_name
+    first_appearance
+    last_appearance
+    role_changes]
+    
+    %% Relationship Processing
+    H1 -->|Extract| I1[Relationships]
+    H2 -->|Add| I2[Series-Specific Relationship Fields:
+    first_interaction
+    significant_developments
+    relationship_trajectory]
+    
+    %% Series Graph Building
+    F1 -->|Create container| J1[SeriesGraph]
+    G3 -->|Add Book| J1
+    H2 -->|Add Characters| J1
+    I2 -->|Add Relationships| J1
+    
+    %% Series Management Commands
+    K1[CLI Commands] -->|series-init| F1
+    K1 -->|process with --add-to-series| J2[Add Book to Series]
+    K1 -->|series-analyze| J3[Generate Series Analysis]
+    
+    %% Series Analysis
+    J1 -->|Extract| L1[Series-Wide Analytics]
+    L1 -->|Books| L2[Books in Reading Order]
+    L1 -->|Characters| L3[Recurring Characters]
+    L1 -->|Relationships| L4[Evolving Relationships]
+    
+    %% Character Reconciliation
+    J1 -->|Match Names| M1[Character Name Resolution:
+    Match characters across books
+    Determine canonical names
+    Track alternative names]
+    
+    %% Character Evolution Tracking
+    M1 -->|Track| N1[Character Evolution:
+    Store arc points
+    Track importance changes
+    Monitor role changes]
+    
+    %% Relationship Evolution
+    M1 -->|Track| N2[Relationship Evolution:
+    First interactions
+    Dynamic changes
+    Emotional tone shifts]
+    
+    %% Output Generation
+    J3 -->|Generate| O1[Series Analysis Report:
+    Character importance across books
+    Major relationship developments
+    Character type evolution
+    Reading order]
+    
+    %% Outputs
+    O1 -->|Save| P1[Series Analysis File]
+    J1 -->|Save| P2[Series JSON File]

@@ -1,0 +1,174 @@
+
+flowchart TD
+    %% Input Types
+    A{Input Type?} -->|Single Book| SB[EPUB File]
+    A -->|Book Series| Series[Multiple EPUB Files]
+    
+    %% Series Initialization
+    Series -->|series-init command| SeriesInit["Series Initialization:
+Create Series metadata
+series_name, author, created_at
+Setup tracking container"]
+    
+    SeriesInit -->|Save| SeriesFile["Series JSON File:
+Book references
+Character tracking
+Relationship tracking"]
+    
+    %% Parse EPUB
+    SB -->|Parse| B[EPUB Parser]
+    B -->|Extract| C[Full Text]
+    B -->|Extract| D[Metadata: title, author]
+    
+    %% Series Mode Selection
+    D -->|Process Mode| SeriesMode{Series Mode?}
+    SeriesMode -->|"Single Book (default)"| SingleMode[Standard Processing]
+    SeriesMode -->|"Series Book
+(--series-name, --book-number)"| SeriesMode2[Series-Aware Processing]
+    
+    %% NLP Method Selection
+    C -->|Choose extraction method| E{NLP Method?}
+    
+    %% SpaCy Branch
+    E -->|"spaCy (default)"| F["Entity Extractor
+~57 chunks, 1000 chars each"]
+    F -->|"Extract with spaCy NER"| G["NER Pipeline
+Identifies: PERSON, LOC, ORG entities"]
+    G -->|"Filter by occurrence
+(min = 3)"| H["Potential Characters
+~275 entities"]
+    
+    %% LLM Branch
+    E -->|"LLM (--use-llm-for-nlp)"| F2["LLM Entity Extractor
+3 chunks, 250K chars each"]
+    F2 -->|"API call per chunk
+~5s each
+prompt includes title/author"| G2["JSON Response
+{characters: [...]}"]
+    G2 -->|"Merge results"| H2["Potential Characters
+~86-104 entities"]
+    
+    %% Character Verification
+    H -->|"LLM verification
+Ask LLM to confirm entities
+are actually characters"| I["Verified Characters
+(true/false for is_major_character)
+~16-38 characters"]
+    H2 -->|"LLM verification"| I
+    
+    %% Character Excerpts Generation
+    I -->|"Generate character excerpts"| Excerpts["Character Excerpts Generation:
+Search full text for each character name
+Extract sentences containing the name
+Add context (±2 sentences)
+Group by character
+~1300-1600 total excerpts"]
+    
+    %% Character Details Extraction
+    Excerpts -->|"Limit to 5 excerpts per character
+Batch processing (10 chars per batch)"| J["Character Detail Extraction:
+Send character name + excerpts to LLM
+Include title/author in prompt
+Request structured JSON output"]
+    
+    J -->|"LLM Character Details
+(1-2s per character)"| K["Character Profiles
+personality, background, appearance
+key actions, image prompt"]
+    
+    %% Interaction Excerpts Generation
+    K -->|"Generate interaction excerpts"| InteractionExcerpts["Interaction Excerpts Generation:
+For each character excerpt
+Check if it mentions other characters
+If so, add to interaction excerpts
+(Characters determined by relationship mode)"]
+    
+    %% Relationship Extraction Branch
+    InteractionExcerpts -->|"Choose relationship scope"| L{Relationship Mode?}
+    
+    L -->|"Major only (default)"| M["Major character interactions:
+Only excerpts mentioning 2+ major chars
+~2-3 major characters
+~200 interaction excerpts"]
+    
+    L -->|"All (--all-relationships)"| N["All character interactions:
+Excerpts mentioning any 2+ chars
+~16-38 characters
+~700 interaction excerpts"]
+    
+    M -->|"Limit to 10 excerpts
+Send to LLM"| O["LLM Relationship Extraction:
+Provide chars + interaction excerpts
+Request JSON with relationship types
+Include evidence & strength"]
+    
+    N -->|"Limit to 10 excerpts
+Send to LLM"| O
+    
+    O -->|"Process JSON response"| P["Relationships:
+Major only: ~1-2 relationships
+All chars: ~8 relationships
+Include character1, character2,
+type, description, evidence"]
+    
+    %% Character Graph Generation Branches
+    SeriesMode2 -->|Add series metadata| QS["Series-Aware Character Graph:
+series_name, book_number
+reading_order, canonical_names"]
+    SingleMode --> Q["Standard Character Graph"]
+    
+    %% Add data to character graph
+    K -->|"Build Graph
+Nodes = Characters"| Q
+    K -->|"Build Graph
+Nodes = Characters"| QS
+    P -->|"Add edges to graph
+Edges = Relationships"| Q
+    P -->|"Add edges to graph
+Edges = Relationships"| QS
+    
+    %% Series-Specific Processing
+    QS -->|"Add series-specific fields"| QS2["Series Character Fields:
+canonical_name, first_appearance
+last_appearance, role_changes
++
+Series Relationship Fields:
+first_interaction, significant_developments
+relationship_trajectory"]
+    
+    %% Series Graph Building
+    QS2 -->|"process with --add-to-series"| SerGraph["SeriesGraph:
+Character & relationship tracking
+Name resolution across books
+Evolution tracking"]
+    
+    SeriesFile -->|Load data| SerGraph
+    SerGraph -->|Save updated| SeriesFile
+    
+    %% Series Analysis
+    SerGraph -->|"series-analyze command"| SeriesAnalysis["Series Analysis:
+Recurring characters
+Evolving relationships
+Character evolution
+Reading order"]
+    
+    SeriesAnalysis -->|Save| SeriesReport["Series Analysis Report"]
+    
+    %% Standard Output Generation
+    Q -->|"Generate output"| R["Output Format"]
+    QS -->|"Generate output"| R
+    R -->|"image-prompts"| S["Image Prompts Generator:
+For each character
+Include appearance/personality
+Format as Markdown"]
+    R -->|"kodict"| T["KOReader Dictionary Generator:
+For each character
+Format as .dict file"]
+    
+    %% Final Output  
+    S -->|"Save"| U["Characters TXT File"]
+    T -->|"Save"| V["Dictionary File"]
+    Q -->|"Save"| W["JSON Graph File
+Central Characters Calculated"]
+    QS -->|"Save"| W
+
