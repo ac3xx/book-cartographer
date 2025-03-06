@@ -287,8 +287,9 @@ class LLMProcessor:
             import json
             import re
             
-            # Find JSON-like structure
-            json_match = re.search(r'({.*})', text_response, re.DOTALL)
+            # Try different ways to extract JSON from the response
+            # First, try to find a JSON object
+            json_match = re.search(r'({[\s\S]*})', text_response, re.DOTALL)
             if json_match:
                 json_str = json_match.group(1)
                 try:
@@ -303,11 +304,76 @@ class LLMProcessor:
                         missing_major_characters=result_data.get("missing_major_characters", [])
                     )
                 except json.JSONDecodeError:
-                    raise ValueError(f"Invalid JSON in response: {json_str}")
+                    # Try to fix truncated JSON by completing it
+                    try:
+                        # Count opening and closing braces
+                        open_braces = json_str.count('{')
+                        close_braces = json_str.count('}')
+                        # If missing closing braces, add them
+                        if open_braces > close_braces:
+                            json_str += "}" * (open_braces - close_braces)
+                        result_data = json.loads(json_str)
+                        verified_chars = []
+                        for char_data in result_data.get("verified_characters", []):
+                            verified_chars.append(VerifiedCharacter(**char_data))
+                        
+                        return CharacterVerificationResult(
+                            verified_characters=verified_chars,
+                            rejected_entries=result_data.get("rejected_entries", []),
+                            missing_major_characters=result_data.get("missing_major_characters", [])
+                        )
+                    except:
+                        # If that fails, try looking for verified_characters array directly
+                        vc_match = re.search(r'"verified_characters"\s*:\s*(\[[\s\S]*?\])', text_response, re.DOTALL)
+                        if vc_match:
+                            try:
+                                chars_array = json.loads(vc_match.group(1))
+                                verified_chars = []
+                                for char_data in chars_array:
+                                    verified_chars.append(VerifiedCharacter(**char_data))
+                                
+                                return CharacterVerificationResult(
+                                    verified_characters=verified_chars,
+                                    rejected_entries=[],
+                                    missing_major_characters=[]
+                                )
+                            except:
+                                raise ValueError(f"Invalid JSON in response: {json_str}")
             else:
                 raise ValueError("No JSON found in response")
         except Exception as e:
             logger.error(f"Error in character verification: {str(e)}")
+            error_str = str(e)
+            
+            # Attempt to extract character data from the error message
+            if "Invalid JSON in response" in error_str and '"verified_characters"' in error_str:
+                import re
+                import json
+                
+                # Try to extract character objects from the error
+                char_pattern = re.compile(r'{\s*"name":\s*"([^"]+)".*?}', re.DOTALL)
+                matches = char_pattern.findall(error_str)
+                
+                if matches:
+                    logger.info(f"Found {len(matches)} characters in error message, attempting recovery")
+                    verified_chars = []
+                    
+                    for char_name in matches:
+                        # Create a minimal valid character object for each name found
+                        verified_chars.append(VerifiedCharacter(
+                            name=char_name,
+                            alternative_names=[],
+                            confidence="high",
+                            character_type="supporting",
+                            is_major_character=False,
+                            archetype="unknown"
+                        ))
+                    
+                    return CharacterVerificationResult(
+                        verified_characters=verified_chars,
+                        rejected_entries=[]
+                    )
+            
             logger.debug(f"Raw response: {response if isinstance(response, str) else 'non-string response'}")
             # Return empty result as fallback
             return CharacterVerificationResult(

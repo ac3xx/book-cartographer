@@ -36,13 +36,16 @@ async def process_epub(
     epub_path: Path,
     config: AppConfig,
     output_file: Optional[Path] = None,
-) -> None:
+) -> CharacterGraph:
     """Process an EPUB file to extract character graph.
 
     Args:
         epub_path: Path to the EPUB file
         config: Application configuration
         output_file: Optional output file path override
+        
+    Returns:
+        The generated CharacterGraph instance
     """
     # Parse the EPUB file
     with Progress(
@@ -328,6 +331,9 @@ async def process_epub(
                 mentions = char.get("metrics", {}).get("mention_count", 0)
                 char_type = char.get("character_type", "unknown")
                 console.print(f"- {name} ({char_type}): {mentions} mentions")
+                
+    # Return the graph for further processing
+    return graph
 
 
 @click.group()
@@ -563,7 +569,48 @@ def process_command(
     
     # Process the EPUB file
     try:
-        asyncio.run(process_epub(epub_file, app_config, output))
+        graph = asyncio.run(process_epub(epub_file, app_config, output))
+        
+        # Add to series if requested
+        if add_to_series and app_config.series.enable_series_tracking:
+            if not app_config.series.series_name:
+                console.print("[red]No series name provided. Use --series-name option.[/red]")
+                sys.exit(1)
+                
+            # Find series file
+            series_name = app_config.series.series_name
+            safe_name = ''.join(c if c.isalnum() else '_' for c in series_name)
+            series_file = Path(f"{safe_name}_series.json")
+            
+            if not series_file.exists():
+                console.print(f"[red]Series file {series_file} not found. Initialize it with series-init command.[/red]")
+                sys.exit(1)
+                
+            # Load the series graph
+            from .series_graph import SeriesGraph
+            try:
+                series_graph = SeriesGraph.load_from_file(series_file)
+                
+                # Set book number and reading order in metadata
+                if not graph.series_metadata.book_number and book_number:
+                    graph.series_metadata.book_number = book_number
+                if not graph.series_metadata.reading_order and book_number:
+                    graph.series_metadata.reading_order = book_number
+                if not graph.series_metadata.series_name:
+                    graph.series_metadata.series_name = series_name
+                    
+                # Add the book
+                series_graph.add_book(graph)
+                
+                # Save the updated series file
+                series_graph.save_to_file(series_file)
+                console.print(f"[green]Added '{graph.title}' to series '{series_name}'[/green]")
+                
+            except Exception as e:
+                console.print(f"[red]Error adding book to series: {str(e)}[/red]")
+                console.print(f"[red]Details: {e}[/red]")
+                sys.exit(1)
+                
     except Exception as e:
         logger.exception(f"Error processing EPUB: {str(e)}")
         console.print(f"[red]Error processing EPUB: {str(e)}[/red]")

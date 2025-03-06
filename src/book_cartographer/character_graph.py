@@ -593,10 +593,13 @@ class CharacterGraph:
                     
                     # Also update character_type based on importance score
                     importance = metrics["importance_score"]
-                    if importance > 6.5:  # Major character threshold
-                        self.graph.nodes[node]["character_type"] = "major"
+                    centrality = metrics["centrality_score"]
+                    
+                    # Use a combination of importance and centrality to determine character type
+                    if importance > 3.0 or centrality > 0.6:  # Major character threshold
+                        self.graph.nodes[node]["character_type"] = "major" 
                         self.graph.nodes[node]["is_major_character"] = True
-                    elif importance > 4.0:  # Supporting character threshold
+                    elif importance > 2.0 or centrality > 0.4:  # Supporting character threshold
                         self.graph.nodes[node]["character_type"] = "supporting"
                         self.graph.nodes[node]["is_major_character"] = False
                     else:  # Minor character
